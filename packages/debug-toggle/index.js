@@ -1,3 +1,6 @@
+import { enabled, enable, disable } from '@libp2p/logger'
+
+let debug = false
 export const render = (toElement, { helia }) => {
   const debug = localStorage.getItem("debug") ? true : false;
   const label = debug ? "Stop debugging" : "Start debugging";
@@ -8,15 +11,14 @@ export const render = (toElement, { helia }) => {
   const button = document.getElementById("debugToggle");
 
   button.addEventListener("click", async () => {
-    if (debug) {
-      localStorage.removeItem("debug");
-      button.className = "btn btn-success";
-    } else {
-      localStorage.setItem("debug", "libp2p:*");
+    if (localStorage.getItem("debug") ? true : false) {
+      disable();
+      button.innerText = "Start debugging";
       button.className = "btn btn-secondary";
+    } else {
+      enable("libp2p:*");
+      button.innerText = "Stop debugging";
+      button.className = "btn btn-success";
     }
-
-    // would be good to hot reload libp2p but requires page refresh.
-    window.location.reload();
   });
 };
